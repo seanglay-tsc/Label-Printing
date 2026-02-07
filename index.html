@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>50x25 Portrait Label</title>
+
+    <style>
+      /* ===== HARD LABEL SIZE ===== */
+      :root {
+        --w: 50mm;
+        --h: 25mm;
+      }
+
+      /* FORCE PORTRAIT + EXACT SIZE */
+      @page {
+        size: 50mm 25mm portrait;
+        margin: 0;
+      }
+
+      /* RESET */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* PRINT CANVAS */
+      html,
+      body {
+        width: var(--w);
+        height: var(--h);
+        overflow: hidden; /* ← critical: nothing escapes */
+        font-family: Arial, sans-serif;
+      }
+
+      /* screen preview */
+      body {
+        display: grid;
+        place-items: center;
+        background: #eee;
+      }
+
+      /* toolbar */
+      .toolbar {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+      }
+
+      /* ===== LABEL ===== */
+      .label {
+        width: var(--w);
+        height: var(--h);
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        padding: 0;
+
+        overflow: hidden; /* ← containment */
+        background: white;
+        border: 1px dashed #999;
+      }
+
+      /* layout rows */
+      .top {
+        display: flex;
+        justify-content: space-between;
+        gap: 1mm;
+        min-height: 0;
+      }
+
+      /* text scaling */
+      .title {
+        font-size: clamp(6pt, 2.5mm, 9pt);
+        font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .meta {
+        font-size: clamp(5pt, 2mm, 7pt);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .price {
+        font-size: clamp(7pt, 3mm, 10pt);
+        font-weight: bold;
+        white-space: nowrap;
+      }
+
+      /* barcode */
+      .barcode {
+        height: 8mm;
+        border: 1px solid black;
+
+        display: grid;
+        place-items: center;
+
+        font-size: 7pt;
+
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      /* ===== PRINT MODE ===== */
+      @media print {
+        body {
+          background: transparent;
+          display: block;
+          margin: 0;
+          padding: 0;
+          width: var(--w);
+          height: var(--h);
+        }
+
+        .toolbar {
+          display: none;
+        }
+
+        .label {
+          border: none;
+        }
+
+        * {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="toolbar">
+      <button onclick="window.print()">Print</button>
+    </div>
+
+    <div class="label">
+      <div class="top">
+        <div style="min-width: 0">
+          <div class="title">Product Name Very Long Title</div>
+          <div class="meta">Code: A001</div>
+        </div>
+
+        <div class="price">$3.50</div>
+      </div>
+
+      <div class="barcode">||||||||||||||||||||</div>
+    </div>
+  </body>
+</html>
